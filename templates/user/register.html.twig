@@ -1,0 +1,234 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}membre{% endblock %}
+
+{% block body %}
+    <div class="wrapper">
+        
+        {# ------------------------SIDEBAR---------------------------------- #}
+            {{ include('include/sidebar.html.twig') }}
+        {# ------------------------FIN SIDEBAR---------------------------------- #}
+
+        {# ------------------------CONTENU---------------------------------- #}
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1 align="center">
+                    Gestion des utilisateurs
+                </h1>
+            </section>
+
+            <div class="content">
+
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-target="#modelId">
+                    <i class="fas fa-user-plus"></i> Nouveau utilisateur
+                </button>
+                {{ include('include/notification.html.twig') }}
+                
+                <!-- debut Modal ajout -->
+            <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title">Ajout d'un utilisateur</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                        </div>
+                        <div class="modal-body">
+                            {{ form_start(formRegister) }}
+                                    {# // {{ form_widget(formRegister) }} #}
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            {{ form_row(formRegister.username) }}
+                                            {{ form_row(formRegister.password) }}
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            {{ form_row(formRegister.email) }}
+                                            {{ form_row(formRegister.roleUser) }}
+                                        </div>
+                                    </div>
+  
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                </div>
+                            {{ form_end(formRegister) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- fin Modal ajout -->
+
+                 <!-- debut table utilisateur -->
+                <table class="table table-striped table-responsive-md" style="width=100%;" id="table_datatable">
+                    <thead class="bg-dark text-white">
+                        <tr>
+                            <th style="display:none;">Id</th>
+                            <th>Nom d'utilisateur</th>
+                            {# <th>Mot de passe</th> #}
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in affichUser %}
+                            <tr>
+                                <td style="display:none;">{{ row.id }}</td>
+                                <td>{{ row.username }}</td>
+                                <td >{{ row.email }}</td>
+                                <td style="display:none;">{{ row.role }}</td>
+                                <td style="display:none;">{{ row.password }}</td>
+                                <td>
+                                    {{ row.nomRoleFormated | title }}
+                                </td>
+                                <td style="text-center">
+                                    <button type="button" class="btn btn-success btnEdit"><i class="fas fa-edit"></i></button>
+                                    <button type="button" class="btn btn-danger btnSuppr"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        {% endfor  %}
+                    </tbody>
+                </table>
+            <!-- fin table utilisateur -->
+
+                <!-- debut Modal supprimer -->
+                <div class="modal fade" id="modalSuppr" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Suppression d'un utilisateur</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="deleteForm" method="post">
+                                    <input type="hidden" name="delete_id _method" id="delete_id">
+                                        
+                                        <div class="container-fluid">
+                                            Vous voulez vraiment supprimer cet utilisateur ?
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-danger" name="deleteData">Oui</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                                        </div>
+                                </form>    
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- fin Modal supprimer -->
+
+                <!-- debut Modal editer -->
+                <div class="modal fade" id="modalEditer" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title">Modifier un utilisateur</h6>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                            </div>
+                            <div class="modal-body">
+                                
+                            <form  action="{{ path('security.register') }}" method="post" id="updateForm">
+
+                                <input type="hidden" name="update_id" id="update_id">
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label>Nom d'utilisateur</label>
+                                        <input type="text" name="nom" id="nom" class="form-control" aria-describedby="helpId">
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label>Email</label>
+                                        <input type="email" name="email" id="email" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label>Rôle</label>
+                                        <select class="form-control"name="role"  id="role" >
+                                            {% for role_user in listRole %}
+                                                <option value={{role_user.nomRole}}>
+                                                    {{ role_user.nomRoleFormated | title }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label>Mot de passe</label>
+                                        <input type="password" name="password"  id="password" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-success" name="updateUtilisateur">Modifier</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                                </div>
+                            </form> 
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            <!-- fin Modal editer -->
+            </div>
+        </div>
+        {# ------------------------FIN CONTENU---------------------------------- #}
+    </div>
+    {{ include('include/footer.html.twig') }}
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $(function(){
+
+            // --------------supprimer----------------------------------
+            $('.btnSuppr').on('click',function(){
+
+                $('#modalSuppr').modal('show');
+
+                $tr = $(this).closest('tr');
+
+                let data = $tr.children("td").map(function(){
+                    return $(this).text();
+                }).get();
+
+                $('#delete_id').val(data[0]);
+
+                $('#deleteForm').attr('action','/admin/'+data[0]);
+
+            });
+
+            // ----------------------------- editer--------------------
+            $('.btnEdit').on('click',function(){
+
+                $("#modalEditer").modal('show');
+
+                $tr = $(this).closest('tr');
+                let data = $tr.children("td").map(function(){
+                    return $(this).text();
+                }).get();
+
+                // console.log(data[4]);
+
+                $('#update_id').val(data[0]);
+                $('#nom').val(data[1]);
+                $('#email').val(data[2]);
+                $('#role').val(data[3]);
+                $('#password').val(data[4]);
+
+                $('#updateForm').attr('action','/admin/editer/'+data[0]);
+                    
+            });
+        });
+    </script>
+{% endblock %}

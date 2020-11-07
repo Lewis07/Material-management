@@ -1,0 +1,46 @@
+ {# <form action="{{ path('fournir_materiel') }}" method="post">
+                                        <div class="row">
+			                            	
+				                            <div class="col-md-6 mb-3">
+	                                        	<label>Source</label>
+	                                           	<select name="source" class="form-control">
+				                                    <?php foreach($types as $t): ?>
+	                          
+	                                                        <option value="<?php echo $t->typeArt; ?>"><?php echo $t->typeArt; ?></option>
+	                                                    <?php endforeach; ?>
+	                                            </select> 
+	                                            <span class="text-danger"><?php echo form_error("typ");?></span>                           
+	                                    	</div>
+
+			                            </div>
+                                    </form> #}
+
+$('.btnAdd').on('click',function(){
+                $('#modelId').modal('show');
+                //alert('modal');
+
+            });
+
+            //console.log(choixSource.html());
+
+             /* choixSource.on('change',function(){
+
+               console.log( $(this).text() );
+
+               /* if(choixSource.children().val() == "Organisme publique"){
+					selectNature.html('<option value="Dotation">Dotation</option><br><option value="Don">Don</option><br><option value="Achat">Achat</option>');
+                   // aseho.hide();
+				}
+
+				else if(choixSource.children().val() == "Donateur"){
+					choixSource.html('<option value="Don">Don</option><br><option value="Dotation">Dotation</option><br><option value="Achat">Achat</option>');
+                    //aseho.hide();  
+				}
+				else if(choixSource.children().val() == "Fournisseur"){
+					choixSource.html('<option value="Achat">Achat</option><br><option value="Don">Don</option><br><option value="Dotation">Dotation</option>');
+                    //aseho.show();
+				}
+            });*/
+
+
+choixSource = $(".choixSource");selectNature = $(".selectNature");

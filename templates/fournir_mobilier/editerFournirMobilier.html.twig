@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}fournir mobilier{% endblock %}
+
+{% block body %}
+    <div class="wrapper">
+        
+        {# ------------------------SIDEBAR---------------------------------- #}
+            {{ include('include/sidebar.html.twig') }}
+        {# ------------------------FIN SIDEBAR---------------------------------- #}
+
+        {# ------------------------CONTENU---------------------------------- #}
+        <div class="content-wrapper">
+
+            <section class="content-header">
+                <h1 align="center">
+                    Editer un approvisionnement de mobilier
+                </h1>
+            </section>
+
+            <div class="content">
+                {{ form_start(formFournirMobilier) }}
+                {# {{ form_widget(formFournirMobilier) }} #}
+                    <div class="row">
+                        <div class="col-md-4">
+                            {{ form_row(formFournirMobilier.sources,{'label' : 'Source'}) }}
+                            {{ form_row(formFournirMobilier.mobiliers,{'label' : 'mobiliers'}) }}
+                            {{ form_row(formFournirMobilier.prixMobilier,{'attr' : {'style' : "display:none",'class' : "aseho"} },{'label' : 'prix du mobilier'} ) }}
+                        </div> 
+
+                        <div class="col-md-4">
+                            {{ form_row(formFournirMobilier.dateEntree,{'label' : "Date d'entrée"}) }}
+                            {{ form_row(formFournirMobilier.nature,{'attr' : {'class' : "choix"} } ) }}
+                        </div>    
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Modifier</button>
+                    <a class="btn btn-secondary" href="{{ path('fournir_mobilier') }}" role="button">Retour</a>
+                {{ form_end(formFournirMobilier) }} 
+            </div>
+        </div>
+        {# ------------------------FIN CONTENU---------------------------------- #}
+    </div>
+    {{ include('include/footer.html.twig') }}
+{% endblock %}
+
+{% block javascripts %}
+    {# <script src="{{ asset('jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script> #}
+    <script>
+        $(function(){
+            // --------------------Editer-------------------------------------------
+            let choix = $(".choix");aseho = $(".aseho");
+
+            choix.on('change',function(){
+            
+                if( choix.val() == "Achat"){
+                    aseho.show();
+                }
+                else{
+                    aseho.hide();
+                }
+            });
+
+        });
+    </script>
+{% endblock %}
+

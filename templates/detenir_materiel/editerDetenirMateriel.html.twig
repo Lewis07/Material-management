@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}detenir materiel{% endblock %}
+
+{% block body %}
+    <div class="wrapper">
+        
+        {# ------------------------SIDEBAR---------------------------------- #}
+            {{ include('include/sidebar.html.twig') }}
+        {# ------------------------FIN SIDEBAR---------------------------------- #}
+
+        {# ------------------------CONTENU---------------------------------- #}
+        <div class="content-wrapper">
+
+            <section class="content-header">
+                <h1 align="center">
+                   Editer un détention de materiel
+                </h1>
+            </section> 
+
+            <div class="content">
+                {{ form_start(formDetenirMateriel) }}
+                {# {{ form_widget(formDetenirMateriel) }} #}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form_row(formDetenirMateriel.materiels,{'label' : 'Materiel'}) }}
+                            {{ form_row(formDetenirMateriel.detenteurs,{'label' : 'Detenteur'}) }}
+                            {{ form_row(formDetenirMateriel.dateSortie,{'label' : "Date de sortie"}) }}
+                        </div> 
+
+                        <div class="col-md-6 mb-3">
+                            {{ form_row(formDetenirMateriel.qteSortie,{'label' : 'Quantité sortie'}) }}
+                            {{ form_row(formDetenirMateriel.lieu,{'label' : "Lieu"}) }}
+                            {{ form_row(formDetenirMateriel.dateRetour,{'label' : 'Date de retour'}) }}
+                        </div>    
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Modifier</button>
+                    <a class="btn btn-secondary" href="{{ path('detenir_materiel_index') }}" role="button">Retour</a>
+                {{ form_end(formDetenirMateriel) }} 
+            </div>
+        </div>
+        {# ------------------------FIN CONTENU---------------------------------- #}
+    </div>
+    {{ include('include/footer.html.twig') }}
+{% endblock %}
+

@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}editer entretien{% endblock %}
+
+{% block body %}
+    <div class="wrapper">
+        
+        {# ------------------------SIDEBAR---------------------------------- #}
+            {{ include('include/sidebar.html.twig') }}
+        {# ------------------------FIN SIDEBAR---------------------------------- #}
+
+        {# ------------------------CONTENU---------------------------------- #}
+        <div class="content-wrapper">
+
+            <section class="content-header">
+                <h1 align="center">
+                    Editer un entretien
+                </h1>
+            </section> 
+
+            <div class="content">
+                {{ form_start(formEntretien) }}
+                {# {{ form_widget(formEntretien) }} #}
+                    <div class="row">
+                        <div class="col-md-4">
+                            {{ form_row(formEntretien.mobiliers,{'label' : "Mobilier"}) }}
+                            {{ form_row(formEntretien.prix,{'label' : "Prix"}) }}
+                            {{ form_row(formEntretien.descriptionEntretien) }}
+                        </div> 
+
+                        <div class="col-md-4">
+                            {{ form_row(formEntretien.dateDebut,{'label' : "Date de debut"}) }}
+                            {{ form_row(formEntretien.dateFin ,{'label' : "Date de fin"}) }}
+                        </div>    
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Modifier</button>
+                    <a class="btn btn-secondary" href="{{ path('entretien') }}" role="button">Retour</a>
+                {{ form_end(formEntretien) }} 
+            </div>
+        </div>
+        {# ------------------------FIN CONTENU---------------------------------- #}
+    </div>
+    {{ include('include/footer.html.twig') }}
+{% endblock %}
+

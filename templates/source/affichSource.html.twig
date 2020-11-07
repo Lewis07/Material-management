@@ -1,0 +1,156 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}source{% endblock %}
+
+{% block body %}
+    <div class="wrapper">
+        
+        {# ------------------------SIDEBAR---------------------------------- #}
+            {{ include('include/sidebar.html.twig') }}
+        {# ------------------------FIN SIDEBAR---------------------------------- #}
+
+        {# ------------------------CONTENU---------------------------------- #}
+        <div class="content-wrapper">
+
+            <section class="content-header">
+                <h1 align="center">
+                    Gestion de source
+                </h1>
+            </section>
+
+            <div class="content">
+
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-target="#modelId">
+                    <i class="fas fa-plus"></i> Nouveau source
+                </button>
+                {{ include('include/notification.html.twig') }}
+                
+                <!-- Modal d'ajout de source -->
+                <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Ajout d'un source</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                            </div>
+                            <div class="modal-body">
+                                {{ form_start(formSource) }}
+
+                                    {# {{ form_widget(formSource) }} #}
+                                    {{ form_row(formSource.nomSource,{'label' : 'Nom du source'}) }}
+
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                    </div>
+
+                                {{ form_end(formSource) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- fin Modal d'ajout de source -->
+
+                <!-- Table source -->
+                    <table class="table table-striped table-inverse" id="table_datatable">
+                        <thead class="thead-inverse">
+                            <tr>
+                                <th style="display:none;">Id</th>
+                                <th>Source</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in affichSource %}
+                                <tr>
+                                    <td style="display:none;">{{ row.id }}</td>
+                                    <td >{{ row.nomSource }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-success btnEdit" data-id="{{ row.id }}" data-source="{{ row.nomSource }}"><i class="fas fa-edit"></i></button>
+                                        <button type="button" class="btn btn-danger btnSuppr" data-id="{{ row.id }}"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                <!-- fin Table source -->
+
+                <!--  Modal d suppr de source -->
+                <div class="modal fade" id="modalSuppr" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Suppression d'un source</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="" method="post" id="deleteForm">
+                                    <h6>Vous voulez vraiment supprimer ce source ?</h6>
+                                    <div class="modal-footer">
+                                            <button type="submit" class="btn btn-danger">Oui</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- fin Modal d suppr de source -->
+
+                <!--  Modal d editer source -->
+                <div class="modal fade" id="modalEditer" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Modification d'un source</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="" method="post" id="editForm">
+                                    <input type="text" name="nom" id="nom" class="form-control">
+                                    <div class="modal-footer">
+                                            <button type="submit" class="btn btn-success">Modifier</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- fin Modal d editer source -->
+            </div>
+        </div>
+        {# ------------------------FIN CONTENU---------------------------------- #}
+    </div>
+    {{ include('include/footer.html.twig') }}
+{% endblock %}
+{% block javascripts %}
+   
+    <script>
+        $(function(){
+            // ----------script suppression------------------------------
+            $('.btnSuppr').on('click',function(e){
+                e.preventDefault();
+                $('#modalSuppr').modal('show');
+                var id = $(this).data('id');
+                $('#deleteForm').attr('action',`delete/${id}`);
+            });
+
+            // ----------script modification------------------------------
+            $('.btnEdit').on('click',function(){
+                $('#modalEditer').modal('show');
+                let id = $(this).data('id');
+                let source = $(this).data('source');
+                $('#nom').val(source);
+                $("#editForm").attr('action',`editer/${id}`);
+            });
+        });
+    </script>
+{% endblock %}

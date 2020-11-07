@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}accueil{% endblock %}
+
+{% block body %}
+    <div >
+        
+        {# ------------------------SIDEBAR---------------------------------- #}
+            {{ include('include/sidebar.html.twig') }}
+        {# ------------------------FIN SIDEBAR---------------------------------- #}
+
+        {# ------------------------CONTENU---------------------------------- #}
+        <div class="content-wrapper">
+            <br><br><br><br><br><br><br><br><br><br>
+            <h3 class="text-center landing">Bienvenue sur l'application gestion de matériels<br> et de <br>comptabilisation de matières</h3>
+        </div>
+        <!-- ./wrapper -->
+        {# ------------------------FIN CONTENU---------------------------------- #}
+    </div>
+    {{ include('include/footer.html.twig') }}
+{% endblock %}

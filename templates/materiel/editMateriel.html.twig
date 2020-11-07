@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}materiel{% endblock %}
+
+{% block body %}
+    <div class="wrapper">
+        
+        {# ------------------------SIDEBAR---------------------------------- #}
+            {{ include('include/sidebar.html.twig') }}
+        {# ------------------------FIN SIDEBAR---------------------------------- #}
+
+        {# ------------------------CONTENU---------------------------------- #}
+        <div class="content-wrapper">
+        
+           <section class="content-header">
+                <h1 align="center">
+                    Editer un matériel
+                </h1>
+            </section> 
+
+            <div class="content">
+                {{ form_start(formMateriel) }}
+                {# {{ form_widget(formMateriel) }} #}
+                    <div class="row">
+                        <div class="col-md-4">
+                            {{ form_row(formMateriel.nomenclature,{'attr' : {'style' : "display:none",'required':false} }) }}
+                            {{ form_row(formMateriel.designation,{'label' : 'Designation'}) }}
+                            {{ form_row(formMateriel.qteInitiale,{'label' : 'Quantité initiale'}) }}
+                            {{ form_row(formMateriel.service,{'label' : 'Service'}) }}
+                            {{ form_row(formMateriel.etatRetourMateriel,{'label' : 'Etat de retour'}) }}
+                        </div> 
+
+                        <div class="col-md-4">
+                            {{ form_row(formMateriel.stock,{'label' : 'Stock'}) }}
+                            {{ form_row(formMateriel.stockAlerte,{'label' : "Stock d'alerte"}) }}
+                            {{ form_row(formMateriel.categorieMateriel,{'label' : 'Categorie'}) }}
+                        </div>    
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Modifier</button>
+                    <a class="btn btn-secondary" href="{{ path('materiel_index') }}" role="button">Retour</a>
+                {{ form_end(formMateriel) }} 
+            </div>
+        </div>
+        {# ------------------------FIN CONTENU---------------------------------- #}
+    </div>
+    {{ include('include/footer.html.twig') }}
+{% endblock %}
+

@@ -1,0 +1,224 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}detenir materiel{% endblock %}
+
+{% block body %}
+    <div class="wrapper">
+        
+        {# ------------------------SIDEBAR---------------------------------- #}
+            {{ include('include/sidebar.html.twig') }}
+        {# ------------------------FIN SIDEBAR---------------------------------- #}
+        
+
+        {# ------------------------CONTENU---------------------------------- #}
+        <div class="content-wrapper">
+
+            <section class="content-header">
+                <h1 align="center">
+                   Gestion de détention de materiel
+                </h1>
+            </section> 
+
+            <span class="absolute_url" style="display:none">{{ url('security.login') }}</span>
+
+            <div class="content">
+
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-target="#modelId">
+                    <i class="fas fa-plus"></i> Nouveau détention
+                </button>
+                {{ include('include/notification.html.twig') }}
+                
+                <!-- Modal d'ajout de DetenirMateriel -->
+                <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Ajout d'un detenir materiel</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                            </div>
+                            <div class="modal-body">
+                                {{ form_start(formDetenirMateriel) }}
+
+                                     {# {{ form_widget(formDetenirMateriel) }}  #}
+                                     <div class="row">
+
+                                        <div class="col-md-6 mb-3">
+                                            {{ form_row(formDetenirMateriel.detenteurs,{'label' : 'Nom du detenteur'}) }}
+                                            {{ form_errors(formDetenirMateriel.detenteurs) }}
+
+                                            {{ form_row(formDetenirMateriel.materiels,{'label' : 'Materiel'}) }}
+                                            {{ form_errors(formDetenirMateriel.materiels) }}
+
+                                            {{ form_row(formDetenirMateriel.dateSortie,{'label' : "Date de sortie"}) }}
+                                            {{ form_errors(formDetenirMateriel.dateSortie) }}
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            {{ form_row(formDetenirMateriel.qteSortie,{'label' : 'Quantité sortie'}) }}
+                                            {{ form_errors(formDetenirMateriel.qteSortie) }}
+
+                                            {{ form_row(formDetenirMateriel.lieu,{'label' : "Lieu"}) }}
+                                            {{ form_errors(formDetenirMateriel.lieu) }}
+
+                                            {{ form_row(formDetenirMateriel.dateRetour,{'label' : 'Date de retour'}) }}
+                                            {{ form_errors(formDetenirMateriel.dateRetour) }}
+                                        </div>
+                                        
+                                    </div>
+
+
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                    </div>
+
+                                {{ form_end(formDetenirMateriel) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- fin Modal d'ajout de DetenirMateriel -->
+
+                <!-- Table DetenirMateriel -->
+                    <table class="table table-striped  table-responsive" id="table_datatable">
+                        <thead class="thead-inverse">
+                            <tr>
+                                <th style="display:none;">Id</th>
+                                <th style="display:none;">Id materiel</th>
+                                <th>Materiel</th>
+                                <th>Designation</th>
+                                <th>Detenteur</th>
+                                <th>Date de sortie</th>
+                                <th>Temps de sortie</th>
+                                <th>Quantité sortie</th>
+                                <th>Lieu</th>
+                                <th>Date de retour</th>
+                                <th>Temps de retour</th>
+                                <th>Etat de retour</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in affichDetenirMateriel %}
+                                <tr>
+                                    <td style="display:none;">{{ row.id }}</td>
+                                    <td style="display:none;">{{ row.materiels.id }}</td>
+                                    <td >{{ row.materiels.nomenclature }}</td>
+                                    <td >{{ row.materiels.designation }}</td>
+                                    <td >{{ row.detenteurs.nomDetenteur }}</td>
+                                    <td >{{ row.dateSortie | date('d/m/Y') }}</td>
+                                    <td >{{ row.dateSortie | date('H:i') }}</td>
+                                    <td >{{ row.qteSortie }}</td>
+                                    <td >{{ row.lieu }}</td>
+                                    <td >{{ row.dateRetour | date('d/m/Y') }}</td>
+                                    <td >{{ row.dateRetour | date('H:i') }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-{% if row.materiels.etatRetourMateriel == "Bonne" %}success{% else %}danger{% endif %} btnEtat" 
+                                            data-materiel="{{ row.materiels.id }}" 
+                                            data-etat="{{ row.materiels.etatRetourMateriel }}">
+                                            {% if row.materiels.etatRetourMateriel == "Bonne" %}
+                                                Bonne
+                                            {% else %}
+                                                Mauvaise
+                                            {% endif %}
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-success" href="{{ path('detenir_materiel_update',{id : row.id }) }}" data-id="{{ row.id }}" role="button"><i class="fas fa-edit"></i></a>
+                                        <button type="button" class="btn btn-danger btnSuppr" data-id="{{ row.id }}"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                <!-- fin Table DetenirMateriel -->
+
+                 <!--  Modal d suppr de DetenirMateriel -->
+                <div class="modal fade" id="modalSuppr" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Suppression d'un détention de materiel</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="#" method="post" id="deleteForm">
+                                    <h6>Vous voulez vraiment supprimer ce détention materiel ?</h6>
+                                    <div class="modal-footer">
+                                            <button type="submit" class="btn btn-danger">Oui</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- fin Modal d suppr de DetenirMateriel -->
+
+                <!--  Modal Etat Materiel -->
+                <div class="modal fade" id="modalEtat" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Modification de l'état du matériel</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="" method="post" id="editFormMateriel">
+                                    <input type="hidden" name="idMateriel" id="idMateriel" class="form-control">
+                                    <select class="form-control" name="etat" id="etat">
+                                        <option>Bonne</option>
+                                        <option>Mauvaise</option>
+                                    </select>
+                                    
+                                    <div class="modal-footer">
+                                            <button type="submit" class="btn btn-success">Modifier</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- fin Modal Etat Materiel -->
+
+            </div>
+        </div>
+        {# ------------------------FIN CONTENU---------------------------------- #}
+    </div>
+    {{ include('include/footer.html.twig') }}
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $(function(){
+
+            // ----------script suppression------------------------------
+            $('.btnSuppr').on('click',function(e){
+                e.preventDefault();
+                $('#modalSuppr').modal('show');
+                var id = $(this).data('id');
+                $('#deleteForm').attr('action',`delete/${id}`);
+            });
+
+            // ----------script modifier etat ------------------------------
+            $('.btnEtat').on('click',function(){
+                $('#modalEtat').modal('show');
+                let idMateriel = $(this).data('materiel');
+                let etat = $(this).data('etat');
+                // console.log(idMateriel,etat);
+                $('#idMateriel').val(idMateriel);
+                $('#etat').val(etat);
+                let url = $('.absolute_url').text();
+                // $("#editFormMateriel").attr('action',`etat-materiel/${idMateriel}`);
+                $("#editFormMateriel").attr('action',`${url}etat-materiel/${idMateriel}`);
+            });
+        });
+    </script>
+{% endblock %}

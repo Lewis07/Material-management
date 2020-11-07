@@ -1,0 +1,126 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}declaration{% endblock %}
+
+{% block body %}
+    <div class="wrapper">
+        
+        {# ------------------------SIDEBAR---------------------------------- #}
+            {{ include('include/sidebar.html.twig') }}
+        {# ------------------------FIN SIDEBAR---------------------------------- #}
+
+        {# ------------------------CONTENU---------------------------------- #}
+        <div class="content-wrapper">
+
+            <section class="content-header">
+                <h1 align="center">
+                    Gestion de déclaration
+                </h1>
+            </section>
+
+            <div class="content">
+
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-target="#modelId">
+                    <i class="fas fa-plus"></i> Nouveau déclaration
+                </button>
+                
+                {{ include('include/notification.html.twig') }}
+                <!-- Modal d'ajout de declaration -->
+                <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Ajout d'un déclaration</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                            </div>
+                            <div class="modal-body">
+                                {{ form_start(formDeclaration) }}
+
+                                     {{ form_widget(formDeclaration) }} 
+                                     
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                    </div>
+
+                                {{ form_end(formDeclaration) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- fin Modal d'ajout de declaration -->
+
+                <!-- Table declaration -->
+                  <table class="table table-striped " id="table_datatable">
+                    <thead>
+                        <tr>
+                            <th style="display:none;">Id</th>
+                            <th>Detenteur</th>
+                            <th>Contenu</th>
+                            <th>actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for declaration in declarations %}
+                        <tr>
+                            <td style="display:none;">{{ declaration.id }}</td>
+                            <td>{{ declaration.detenteurs.nomDetenteur }}</td>
+                            <td>{{ declaration.contenu }}</td>
+                            <td>
+                                <a href="{{ path('declaration_edit', {'id': declaration.id}) }}" class="btn btn-success"><i class="fas fa-edit"></i></a>
+                                <button type="submit" class="btn btn-danger btnSuppr" data-id="{{ declaration.id }}"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>  
+                <!-- fin Table declaration -->
+
+                <!--  Modal d suppr de declaration -->
+                <div class="modal fade" id="modalSuppr" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Suppression d'un déclaration</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="#" method="post" id="deleteForm">
+                                    <h6>Vous voulez vraiment supprimer ce déclaration ?</h6>
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="">
+                                    <div class="modal-footer">
+                                            <button type="submit" class="btn btn-danger">Oui</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- fin Modal d suppr de declaration -->
+
+            </div>
+        </div>
+        {# ------------------------FIN CONTENU---------------------------------- #}
+    </div>
+    {{ include('include/footer.html.twig') }}
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $(function(){
+            // ----------script suppression------------------------------
+            $('.btnSuppr').on('click',function(e){
+                e.preventDefault();
+                $('#modalSuppr').modal('show');
+                var id = $(this).data('id');
+                $('#deleteForm').attr('action',`delete/${id}`);
+            });
+        });
+    </script>
+{% endblock %}

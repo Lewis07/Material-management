@@ -1,0 +1,72 @@
+security:
+    # on l'a mis en place pour crypter notre mdpass
+    encoders:
+        App\Entity\User:
+            algorithm : bcrypt
+
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        in_memory: { memory: null }
+        from_database : 
+            entity:
+                class : App\Entity\User
+                property : username
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: true
+            # anonymous: lazy
+
+            provider : from_database
+
+            form_login :
+
+                login_path : security.login
+                check_path : security.login
+
+                default_target_path : home
+
+                # default_target_path : security.register
+                # default_target_path : source
+                # default_target_path : entretien
+                # default_target_path : fonction
+                # target_path_parameter: go_to
+
+            logout:
+                path : logout
+                target : security.login
+
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+
+        # - { path: ^/admin, roles: ROLE_ADMIN }
+
+        # - { path: ^/categorie, roles: ROLE_ORDONNATEUR }
+        # - { path: ^/source, roles: ROLE_ORDONNATEUR }
+        # - { path: ^/materiel, roles: ROLE_ORDONNATEUR }
+        # - { path: ^/mobilier, roles: ROLE_ORDONNATEUR }
+
+        # - { path: ^/fournir/materiel, roles: ROLE_COMPTABLE }
+        # - { path: ^/fournir/mobilier, roles: ROLE_COMPTABLE }
+        # - { path: ^/entretien, roles: ROLE_COMPTABLE }
+
+        # - { path: ^/fonction, roles: ROLE_HAFA }
+        # - { path: ^/detenteur, roles: ROLE_HAFA }
+        # - { path: ^/detenir/materiel, roles: ROLE_HAFA }
+        # - { path: ^/detenir/mobilier, roles: ROLE_HAFA }
+
+
+        # - { path: ^/profile, roles: ROLE_USER }
+
+    role_hierarchy:
+        # ROLE_ORDONNATEUR: [ROLE_ADMIN,ROLE_ORDONNATEUR]

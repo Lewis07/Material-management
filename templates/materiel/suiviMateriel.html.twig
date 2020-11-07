@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}suivi de materiel{% endblock %}
+
+{% block body %}
+    <div class="wrapper">
+        
+        {# ------------------------SIDEBAR---------------------------------- #}
+            {{ include('include/sidebar.html.twig') }}
+        {# ------------------------FIN SIDEBAR---------------------------------- #}
+
+        {# ------------------------CONTENU---------------------------------- #}
+        <div class="content-wrapper">
+
+            <section class="content-header">
+                <h1 align="center">
+                    Les matériels en service
+                </h1>
+            </section>  
+
+            {# <pre>
+                {{ dump() }}
+            </pre> #}
+            
+            <div class="content">
+                <!-- Table materiel -->
+                    <table class="table table-striped table-inverse" id="table_datatable">
+                        <thead class="thead-inverse">
+                            <tr>
+                                <th style="display:none;">Id</th>
+                                <th>Nomenclature</th>
+                                <th>Designation</th>
+                                <th>Categorie</th>
+                                <th>Quantité initiale</th>
+                                <th>Etat</th>
+                                <th>Stock</th>
+                                <th>Stock d'alerte</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in suiviMat %}
+                                <tr>
+                                    <td style="display:none;">{{ row.id }}</td>
+                                    <td >{{ row.nomenclature }}</td>
+                                    <td >{{ row.designation }}</td>
+                                    <td >{{ row.categorieMateriel.libelleCateg }}</td>
+                                    <td class="text-center">{{ row.qteInitiale }}</td>
+                                    <td >{{ row.etatRetourMateriel }}</td>
+                                    <td class="text-center">{{ row.stock }}</td>
+                                    <td class="text-center">{{ row.stockAlerte }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                <!-- fin Table materiel -->
+            </div>
+        </div>
+        {# ------------------------FIN CONTENU---------------------------------- #}
+    </div>
+    {{ include('include/footer.html.twig') }}
+{% endblock %}
+

@@ -1,0 +1,229 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}entretien{% endblock %}
+
+{% block body %}
+    <div class="wrapper">
+        
+        {# ------------------------SIDEBAR---------------------------------- #}
+            {{ include('include/sidebar.html.twig') }}
+        {# ------------------------FIN SIDEBAR---------------------------------- #}
+
+        {# ------------------------CONTENU---------------------------------- #}
+        <div class="content-wrapper">
+
+            <section class="content-header">
+                <h1 align="center">
+                    Gestion d'entretien
+                </h1>
+            </section>
+
+            <div class="content">
+
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-target="#modelId">
+                    <i class="fas fa-plus"></i> Nouveau
+                </button>
+                {{ include('include/notification.html.twig') }}
+                
+                <!-- Modal d'ajout de entretien -->
+                <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title">Ajout d'un entretien</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                        </div>
+                        <div class="modal-body">
+                            {{ form_start(formEntretien) }}
+                                    {# {{ form_widget(formEntretien) }} #}
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            {{ form_row(formEntretien.mobiliers, {'label' : "Mobilier"}) }}
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            {{ form_row(formEntretien.prix, {'label' : "Prix"}) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="col-md-6 mb-3">
+                                            {{ form_row(formEntretien.dateDebut, {'label' : "Date de debut"}) }}
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            {{ form_row(formEntretien.dateFin, {'label' : "Date de sortie"}) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="col-md-6 mb-3">
+                                            {{ form_row(formEntretien.descriptionEntretien) }}
+                                        </div>
+
+                                       
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                    </div> 
+                                {{ form_end(formEntretien) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- fin Modal d'ajout de entretien -->
+
+                <!-- debut table entretien -->
+                <table class="table table-striped" style="width=100%;" id="table_datatable">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th style="display:none;">Id</th>
+                            <th>Mobilier</th>
+                            <th>Designation</th>
+                            <th>prix</th>
+                            <th>Date de debut</th>
+                            <th>Date de sortie</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in affichEntretien %}
+                            <tr>
+                                <td style="display:none;">{{ row.id }}</td>
+                                <td>{{ row.mobiliers.codeMobilier }}</td>
+                                <td>{{ row.mobiliers.designation }}</td>
+                                <td>{{ row.prix | number_format(0,'',' ') }} Ar</td>
+                                <td>{{ row.dateDebut | date('d/m/Y') }}</td>
+                                <td>{{ row.dateFin | date('d/m/Y') }}</td>
+
+                                {% if row.descriptionEntretien == "" %}
+                                    <td>
+                                        <p style="display:none" class='aseho'>{{ row.descriptionEntretien }}</p>
+                                    </td>
+                                {% else %}
+                                    <td>
+                                        <p style="display:none" class='aseho'>{{ row.descriptionEntretien }}</p>
+                                        <button type="button" class="btn btn-primary descr"><i class="fas fa-info-circle"></i></button>
+                                    </td>
+                                {% endif %}
+                                
+                                <td>
+                                    <a class="btn btn-success" href="{{ path('entretien.update',{'id' : row.id } ) }}" ><i class="fas fa-edit"></i></a>
+                                    <button type="button" class="btn btn-danger btnSuppr"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        {% endfor  %}
+                    </tbody>
+                </table>
+            <!-- fin table entretien --> 
+
+                <!-- debut Modal supprimer -->
+                <div class="modal fade" id="modalSuppr" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title">Suppression d'un entretien</h6>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="deleteForm" method="post">
+                                    <input type="hidden" name="delete_id _method" id="delete_id">
+                                        
+                                        <div class="container-fluid">
+                                            Vous voulez vraiment supprimer cet entretien ?
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-danger" name="deleteData">Oui</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                                        </div>
+                                </form>    
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- fin Modal supprimer -->
+
+                <!-- debut Modal description -->
+                <div class="modal fade" id="modalDescri" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title">Description</h6>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="" method="post">
+                                     <div class="form-group" align="justify">
+                                        <!--input type="text" id="description" class="form-control" style='border:none;'-->
+                                        <textarea disabled type="text" id="description" class="form-control" style='border:none;' cols="30" rows="10">
+                                        
+                                        </textarea>
+                                    </div>        
+                                
+                                </form>    
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- fin Modal description -->
+            </div>
+        </div>
+        {# ------------------------FIN CONTENU---------------------------------- #}
+    </div>
+    {{ include('include/footer.html.twig') }}
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $(function(){
+
+            // ----------script suppression------------------------------
+            $('.btnSuppr').on('click',function(){
+
+                $('#modalSuppr').modal('show');
+
+                $tr = $(this).closest('tr');
+
+                let data = $tr.children("td").map(function(){
+                    return $(this).text();
+                }).get();
+
+                let id = data[0];
+
+                $('#deleteForm').attr('action','/entretien/'+id);
+
+            });
+
+            // ----------script description------------------------------
+            $('.descr').on('click',function(){
+
+                $('#modalDescri').modal('show');
+
+                $tr = $(this).closest('tr');
+
+                let data = $tr.children("td").map(function(){
+                    return $(this).text();
+                }).get();
+
+                console.log(data);
+
+                $('#description').val(data[6]);
+
+            });
+        });
+    </script>
+{% endblock %}

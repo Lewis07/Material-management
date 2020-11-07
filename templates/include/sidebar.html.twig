@@ -1,0 +1,48 @@
+<!-- Left side column. contains the logo and sidebar -->
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+      <ul class="sidebar-menu" data-widget="tree">
+        <li class="text-center text-white">
+            {{ app.user.nomRoleFormated | upper }}
+        </li>
+        <li><a href="{{ path('home') }}">Accueil</a></li>
+        {# {% set role = app.user.role %} #}
+        
+        {# {% switch with role %} #}
+            {# {% case "ROLE_ADMIN" %} #}
+            {% if is_granted('ROLE_ADMIN') %}
+                <li><a href="{{ path('security.register') }}"><span>Utilisateur</span></a></li>
+                <li><a href="{{ path('fonction_index') }}"><span>Fonction</span></a></li>
+                <li><a href="{{ path('role_index') }}"><span>Rôle</span></a></li>
+            {% elseif is_granted('ROLE_ORDONNATEUR') %}
+            {# {% case "ROLE_ORDONNATEUR" %} #}
+                <li><a href="{{ path('user.membre') }}">Désignation de rôle</a></li>
+                <li><a href="{{ path('categorie_index') }}">Catégorie</a></li>
+                <li><a href="{{ path('source_index') }}">Source</a></li>
+                <li><a href="{{ path('materiel_index') }}">Matériel</a></li>
+                <li><a href="{{ path('mobilier_index') }}">Mobilier</a></li>
+                <li><a href="{{ path('detenteur_index') }}">Détenteur</a></li>
+            {% elseif is_granted('ROLE_DEPOSITAIRE') %}
+            {# {% case "ROLE_DEPOSITAIRE" %} #}
+                <li><a href="{{ path('materiel_suivi') }}"><i class="fas fa-address-card"></i> Suivi des materiels</a></li>
+                <li><a href="{{ path('mobilier_suivi') }}"><i class="fas fa-address-card"></i> Suivi des mobiliers</a></li>
+            {% elseif is_granted('ROLE_RESPONSABLE') %}
+            {# {% case "ROLE_RESPONSABLE" %} #}
+                <li><a href="{{ path('detenir_materiel_index') }}">Détention de matériel</a></li>
+                <li><a href="{{ path('detenir_mobilier_index') }}">Détention de mobilier</a></li>
+                <li><a href="{{ path('declaration_index') }}">Déclaration</a></li>
+            {% elseif is_granted('ROLE_COMPTABLE') %}
+            {# {% case "ROLE_COMPTABLE" %} #}
+                <li><a href="{{ path('fournir_materiel') }}">Approvisionnement matériel</a></li>
+                <li><a href="{{ path('fournir_mobilier') }}">Approvisionnement mobilier</a></li>
+                <li><a href="{{ path('entretien') }}">Entretien</a></li>
+                <li><a href="{{ path('comparaison') }}">Comparaison</a></li>
+            {# {% default %} #}
+        {# {% endswitch %} #}
+            {% endif %}
+      </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>

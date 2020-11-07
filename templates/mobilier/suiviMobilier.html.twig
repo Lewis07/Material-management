@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}suivi de mobilier{% endblock %}
+
+{% block body %}
+    <div class="wrapper">
+        
+        {# ------------------------SIDEBAR---------------------------------- #}
+            {{ include('include/sidebar.html.twig') }}
+        {# ------------------------FIN SIDEBAR---------------------------------- #}
+
+        {# ------------------------CONTENU---------------------------------- #}
+        <div class="content-wrapper">
+
+
+            <section class="content-header">
+                <h1 align="center">
+                    Les mobiliers en service
+                </h1>
+            </section> 
+
+            <div class="content">
+                <!-- Table suivi mobilier -->
+                    <table class="table table-striped table-inverse" id="table_datatable">
+                        <thead class="thead-inverse">
+                            <tr>
+                                <th>Mobilier</th>
+                                <th>Designation</th>
+                                <th>Etat</th>
+                                <th>Categorie</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in suiviMobilier %}
+                                <tr>
+                                    <td >{{ row.codeMobilier }}</td>
+                                    <td >{{ row.designation }}</td>
+                                    <td >{{ row.etat }}</td>
+                                    <td >{{ row.categorieMobilier.libelleCateg }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                <!-- fin Table suivi mobilier -->
+            </div>
+        </div>
+        {# ------------------------FIN CONTENU---------------------------------- #}
+    </div>
+    {{ include('include/footer.html.twig') }}
+{% endblock %}
+

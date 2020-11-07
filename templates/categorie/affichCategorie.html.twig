@@ -1,0 +1,183 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}categorie{% endblock %}
+
+{% block body %}
+    <div class="wrapper">
+        
+        {# ------------------------SIDEBAR---------------------------------- #}
+            {{ include('include/sidebar.html.twig') }}
+        {# ------------------------FIN SIDEBAR---------------------------------- #}
+
+        {# ------------------------CONTENU---------------------------------- #}
+        <div class="content-wrapper">
+
+            <section class="content-header">
+                <h1 align="center">
+                    Gestion de catégorie
+                </h1>
+            </section> 
+
+            <div class="content">
+
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-target="#modelId">
+                    <i class="fas fa-plus"></i> Nouveau catégorie
+                </button>
+                {{ include('include/notification.html.twig') }}
+                
+                <!-- Modal d'ajout de categorie -->
+                <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Ajout d'un catégorie</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                            </div>
+                            <div class="modal-body">
+                                {{ form_start(formCategorie) }}
+
+                                    <div class="row">
+
+                                        <div class="col-md-6 mb-3">
+                                            {{ form_row(formCategorie.libelleCateg,{'label' : 'Categorie'}) }}
+                                        </div>
+                                        
+                                        <div class="col-md-6 mb-3">
+                                            {{ form_row(formCategorie.descriptionCateg,{'label' : 'Description'}) }}
+                                        </div>
+
+                                    </div>
+
+                                    {# {{ form_widget(formCategorie) }} #}
+
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                    </div>
+
+                                {{ form_end(formCategorie) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- fin Modal d'ajout de categorie -->
+
+                <!-- Table categorie -->
+                    <table class="table table-striped table-inverse" id="table_datatable">
+                        <thead class="thead-inverse">
+                            <tr>
+                                <th style="display:none;">Id</th>
+                                <th>Catégorie</th>
+                                <th>Description</th>
+                                <th style="text-align:center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in affichCategorie %}
+                                <tr>
+                                    <td style="display:none;">{{ row.id }}</td>
+                                    <td >{{ row.libelleCateg }}</td>
+                                    <td >{{ row.descriptionCateg }}</td>
+                                    <td style="text-align:center">
+                                        <button type="button" class="btn btn-success btnEdit" data-id="{{ row.id }}" data-categorie="{{ row.libelleCateg }}" data-description="{{ row.descriptionCateg }}"><i class="fas fa-edit"></i></button>
+                                        <button type="button" class="btn btn-danger btnSuppr" data-id="{{ row.id }}"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                <!-- fin Table categorie -->
+
+                <!--  Modal d suppr de categorie -->
+                <div class="modal fade" id="modalSuppr" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Suppression d'un catégorie</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="" method="post" id="deleteForm">
+                                    <h6>Vous voulez vraiment supprimer ce catégorie ?</h6>
+                                    <div class="modal-footer">
+                                            <button type="submit" id="btnOui" class="btn btn-danger">Oui</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- fin Modal d suppr de categorie -->
+
+                <!--  Modal d editer categorie -->
+                <div class="modal fade" id="modalEditer" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Modification d'un catégorie</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="" method="post" id="editForm">
+
+                                    <div class="row">
+
+                                        <div class="col-md-6 mb-3">
+                                            <input type="text" name="libelle" id="libelle" class="form-control"><br><br>
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            <input type="text" name="description" id="description" class="form-control"><br><br>
+                                        </div>
+
+                                    </div>
+                                    
+                                    <div class="modal-footer">
+                                            <button type="submit" class="btn btn-success">Modifier</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- fin Modal d editer categorie -->
+            </div>
+        </div>
+        {# ------------------------FIN CONTENU---------------------------------- #}
+    </div>
+    {{ include('include/footer.html.twig') }}
+{% endblock %}
+{% block javascripts %}
+    
+    <script>
+        $(function(){
+            // ----------script suppression------------------------------
+            $('.btnSuppr').on('click',function(e){
+                e.preventDefault();
+                $('#modalSuppr').modal('show');
+                var id = $(this).data('id');
+                $('#deleteForm').attr('action',`delete/${id}`);
+            });
+
+            // ----------script modification------------------------------
+            $('.btnEdit').on('click',function(){
+                $('#modalEditer').modal('show');
+                let id = $(this).data('id');
+                let categorie = $(this).data('categorie');
+                let description = $(this).data('description');
+                $('#libelle').val(categorie);
+                $('#description').val(description);
+                $("#editForm").attr('action',`editer/${id}`);
+            });
+        });
+    </script>
+{% endblock %}

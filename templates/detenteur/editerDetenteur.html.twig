@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}editer detenteur{% endblock %}
+
+{% block body %}
+    <div class="wrapper">
+        
+        {# ------------------------SIDEBAR---------------------------------- #}
+            {{ include('include/sidebar.html.twig') }}
+        {# ------------------------FIN SIDEBAR---------------------------------- #}
+
+        {# ------------------------CONTENU---------------------------------- #}
+        <div class="content-wrapper">
+
+            <section class="content-header">
+                <h1 align="center">
+                    Editer un détenteur
+                </h1>
+            </section>  
+            
+            <div class="content">
+                {{ form_start(formDetenteur) }}
+                {# {{ {{ form_widget(formEntretien) }} #}
+                    <div class="row">
+                        <div class="col-md-4">
+                            {{ form_row(formDetenteur.nomDetenteur,{'label' : 'Nom du détenteur'}) }}
+                            {{ form_row(formDetenteur.contact,{'label' : 'Contact'}) }}
+                        </div> 
+
+                        <div class="col-md-4">
+                            {{ form_row(formDetenteur.fonction,{'label' : 'Fonction'}) }}
+                        </div>    
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Modifier</button>
+                    <a class="btn btn-secondary" href="{{ path('detenteur_index') }}" role="button">Retour</a>
+                {{ form_end(formDetenteur) }} 
+            </div>
+        </div>
+        {# ------------------------FIN CONTENU---------------------------------- #}
+    </div>
+    {{ include('include/footer.html.twig') }}
+{% endblock %}
+

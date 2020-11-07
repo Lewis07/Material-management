@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}editer mobilier{% endblock %}
+
+{% block body %}
+    <div class="wrapper">
+        
+        {# ------------------------SIDEBAR---------------------------------- #}
+            {{ include('include/sidebar.html.twig') }}
+        {# ------------------------FIN SIDEBAR---------------------------------- #}
+
+        {# ------------------------CONTENU---------------------------------- #}
+        <div class="content-wrapper">
+
+            <section class="content-header">
+                <h1 align="center">
+                    Editer un mobilier
+                </h1>
+            </section> 
+
+            <div class="content">
+                {{ form_start(formMobilier) }}
+                {# {{ form_widget(formMobilier) }} #}
+                    <div class="row">
+                        <div class="col-md-4">
+                            {{ form_row(formMobilier.codeMobilier,{'label' : 'Code du mobilier'}) }}
+                            {{ form_row(formMobilier.designation,{'label' : 'Designation'}) }}
+                            {{ form_row(formMobilier.service,{'label' : 'Service'}) }}
+                        </div> 
+
+                        <div class="col-md-4">
+                            {{ form_row(formMobilier.etat,{'label' : 'Etat'}) }}
+                            {{ form_row(formMobilier.categorieMobilier,{'label' : "Categorie du mobilier"}) }}
+                        </div>    
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Modifier</button>
+                    <a class="btn btn-secondary" href="{{ path('mobilier_index') }}" role="button">Retour</a>
+                {{ form_end(formMobilier) }} 
+            </div>
+        </div>
+        {# ------------------------FIN CONTENU---------------------------------- #}
+    </div>
+    {{ include('include/footer.html.twig') }}
+{% endblock %}
+
