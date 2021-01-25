@@ -15,6 +15,9 @@ Run this command
 Run this command
 - php bin/console doctrine:migrations:migrate or php bin/console d:m:m
 
+### Launch application 
+Run this : php -S localhost:8000 -t public
+
 ### Features
 There are 5 roles
 
